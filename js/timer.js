@@ -1,56 +1,30 @@
-var centesimas = 0;
-var segundos = 0;
-var minutos = 0;
-var horas = 0;
-var control;
-function inicio () {
-	control = setInterval(cronometro,10);
+var interval;
+var terminado;
+function countdown() {
+  terminado = false
+  clearInterval(interval);
+  interval = setInterval( function() {
+      var timer = $('#timer').html();
+      timer = timer.split(':');
+      var minutes = timer[0];
+      var seconds = timer[1];
+      seconds -= 1;
+      if (minutes < 0) return;
+      else if (seconds < 0 && minutes != 0) {
+          minutes -= 1;
+          seconds = 59;
+      }
+      else if (seconds < 10 && length.seconds != 2) seconds = '0' + seconds;
 
-}
-function parar () {
-	clearInterval(control);
+      $('#timer').html(minutes + ':' + seconds);
 
+      if (minutes == 0 && seconds == 0) clearInterval(interval), terminado = true, gameOver();
+  }, 1000);
 }
-function reinicio () {
-	clearInterval(control);
-	centesimas = 0;
-	segundos = 0;
-	minutos = 0;
-	horas = 0;
-	Centesimas.innerHTML = ":00";
-	Segundos.innerHTML = ":00";
-	Minutos.innerHTML = ":00";
-	Horas.innerHTML = "00";
-
+function reset() {
+    $('#timer').text("2:00");
+    clearInterval(interval);
+    terminado = false;
 }
-function cronometro () {
-	if (centesimas < 99) {
-		centesimas++;
-		if (centesimas < 10) { centesimas = "0"+centesimas }
-		Centesimas.innerHTML = ":"+centesimas;
-	}
-	if (centesimas == 99) {
-		centesimas = -1;
-	}
-	if (centesimas == 0) {
-		segundos ++;
-		if (segundos < 10) { segundos = "0"+segundos }
-		Segundos.innerHTML = ":"+segundos;
-	}
-	if (segundos == 59) {
-		segundos = -1;
-	}
-	if ( (centesimas == 0)&&(segundos == 0) ) {
-		minutos++;
-		if (minutos < 10) { minutos = "0"+minutos }
-		Minutos.innerHTML = ":"+minutos;
-	}
-	if (minutos == 59) {
-		minutos = -1;
-	}
-	if ( (centesimas == 0)&&(segundos == 0)&&(minutos == 0) ) {
-		horas ++;
-		if (horas < 10) { horas = "0"+horas }
-		Horas.innerHTML = horas;
-	}
-}
+//Cuando se quiere iniciar el conteo se llama la función countdown();
+//Cuando se quiere detener y reiniciar se llama la función clearInterval(interval)
