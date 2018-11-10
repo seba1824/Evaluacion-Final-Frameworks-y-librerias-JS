@@ -20,9 +20,100 @@ for (var f=0; f<7; f++){
   }
 }
 
-$(function(){
-
   //agarrar dulces
 
-  $(".elemento").draggable()
-})
+  $('.elemento').draggable({
+      start: function () {
+          $(this).next().droppable({
+              accept: ".elemento",
+              drop: function (event, ui) {
+                  var imagen2 = $(this).attr("src");
+                  var imagen1 = $(ui.draggable).attr("src");
+                  $(this).attr("src", '' + imagen1 + '');
+                  $(ui.draggable).attr("src", '' + imagen2 + '')
+                  movimientos++;
+                  $('#movimientos-text').text(movimientos);
+                  $(this).droppable('destroy')
+              }
+          })
+          $(this).prev().droppable({
+              accept: ".elemento",
+              drop: function (event, ui) {
+                  var imagen2 = $(this).attr("src");
+                  var imagen1 = $(ui.draggable).attr("src");
+                  $(this).attr("src", '' + imagen1 + '');
+                  $(ui.draggable).attr("src", '' + imagen2 + '')
+                  movimientos++;
+                  $('#movimientos-text').text(movimientos);
+                  $(this).droppable('destroy')
+              }
+          })
+          var fila = $(this).index()
+          var columna = $(this).parent().attr('class');
+          columna = columna.split("-")[1];
+          columna = parseInt(columna);
+          if (columna == 1) {
+              var derecha = $('.col-' + (columna + 1) + ' .elemento:eq(' + fila + ')').attr('id');
+              $("#" + derecha).droppable({
+                  accept: ".elemento",
+                  drop: function (event, ui) {
+                      var imagen2 = $(this).attr("src");
+                      var imagen1 = $(ui.draggable).attr("src");
+                      $(this).attr("src", '' + imagen1 + '');
+                      $(ui.draggable).attr("src", '' + imagen2 + '')
+                      movimientos++;
+                      $('#movimientos-text').text(movimientos);
+                      $(this).droppable('destroy')
+                  }
+              })
+          } else if (columna > 1 && columna < 7) {
+              var derecha = $('.col-' + (columna + 1) + ' .elemento:eq(' + fila + ')').attr('id');
+              $("#" + derecha).droppable({
+                  accept: ".elemento",
+                  drop: function (event, ui) {
+                      var imagen2 = $(this).attr("src");
+                      var imagen1 = $(ui.draggable).attr("src");
+                      $(this).attr("src", '' + imagen1 + '');
+                      $(ui.draggable).attr("src", '' + imagen2 + '')
+                      movimientos++;
+                      $('#movimientos-text').text(movimientos);
+                      $(this).droppable('destroy')
+                  }
+              });
+              var izquierda = $('.col-' + (columna - 1) + ' .elemento:eq(' + fila + ')').attr('id');
+              $("#" + izquierda).droppable({
+                  accept: ".elemento",
+                  drop: function (event, ui) {
+                      var imagen2 = $(this).attr("src");
+                      var imagen1 = $(ui.draggable).attr("src");
+                      $(this).attr("src", '' + imagen1 + '');
+                      $(ui.draggable).attr("src", '' + imagen2 + '')
+                      movimientos++;
+                      $('#movimientos-text').text(movimientos);
+                      $(this).droppable('destroy')
+                  }
+              });;
+          } if (columna == 7) {
+              var izquierda = $('.col-' + (columna - 1) + ' .elemento:eq(' + fila + ')').attr('id');
+              $("#" + izquierda).droppable({
+                  accept: ".elemento",
+                  drop: function (event, ui) {
+                      var imagen2 = $(this).attr("src");
+                      var imagen1 = $(ui.draggable).attr("src");
+                      $(this).attr("src", '' + imagen1 + '');
+                      $(ui.draggable).attr("src", '' + imagen2 + '')
+                      movimientos++;
+                      $('#movimientos-text').text(movimientos);
+                      $(this).droppable('destroy')
+                  }
+              });;
+          }
+      },
+      containment: $('.panel-tablero'), cursor: "crosshair", revert: true,
+      stop: function (event, ui) {
+          derecha();
+          abajo();
+          titilar();
+          $('.elemento').draggable('destroy')
+      }
+  });
